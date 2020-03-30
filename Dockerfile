@@ -19,3 +19,4 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.17.5/b
 
 # Some tools like yamllint need this
 ENV LANG=C.UTF-8
+ADD id_grunt /root/.ssh/id_grunt
