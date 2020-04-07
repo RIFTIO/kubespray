@@ -24,6 +24,7 @@ ExecStart={{ docker_bin_dir }}/docker{% if installed_docker_version.stdout is ve
 {% if ansible_os_family == "Suse" %}
           --add-runtime oci=/usr/sbin/docker-runc \
 {% endif %}
+          --exec-opt native.cgroupdriver=systemd \
           $DOCKER_OPTS \
           $DOCKER_STORAGE_OPTIONS \
           $DOCKER_NETWORK_OPTIONS \

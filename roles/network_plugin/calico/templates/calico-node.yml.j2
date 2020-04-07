@@ -213,13 +213,15 @@ spec:
 {% endif %}
 # should be set in etcd before deployment
 #            # Configure the IP Pool from which Pod IPs will be chosen.
-#            - name: CALICO_IPV4POOL_CIDR
-#              value: "{{ calico_pool_cidr | default(kube_pods_subnet) }}"
+            - name: CALICO_IPV6POOL_CIDR
+              value: "{{ calico_pool_cidr | default(kube_pods_subnet) }}"
+            - name: IP6
+              value: "autodetect"
             - name: CALICO_IPV4POOL_IPIP
               value: "{{ calico_ipv4pool_ipip }}"
             # Disable IPv6 on Kubernetes.
             - name: FELIX_IPV6SUPPORT
-              value: "false"
+              value: "true"
             # Set Felix logging to "info"
             - name: FELIX_LOGSEVERITYSCREEN
               value: "{{ calico_loglevel }}"
@@ -239,17 +241,6 @@ spec:
 {% if calico_version is version('v3.4.0', '>=') and calico_advertise_cluster_ips|default(false) %}
             - name: CALICO_ADVERTISE_CLUSTER_IPS
               value: "{{ kube_service_addresses }}"
-{% endif %}
-{% if calico_ip_auto_method is defined %}
-            - name: IP_AUTODETECTION_METHOD
-              value: "{{ calico_ip_auto_method }}"
-            - name: IP
-              value: "autodetect"
-{% else %}
-            - name: IP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.hostIP
 {% endif %}
             - name: NODENAME
               valueFrom:

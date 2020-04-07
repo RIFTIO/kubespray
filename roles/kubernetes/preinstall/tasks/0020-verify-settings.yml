@@ -88,7 +88,7 @@
 
 - name: Stop if ip var does not match local ips
   assert:
-    that: ip in ansible_all_ipv4_addresses
+    that: ip in ansible_all_ipv6_addresses
   ignore_errors: "{{ ignore_assert_errors }}"
   when: ip is defined
 

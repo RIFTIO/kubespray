@@ -9,9 +9,6 @@ fi
 #IMAGE="artifactory.riftio.com/docker/k8sclient"
 HERE=$(dirname $(realpath $0))
 
-inv=${1}
-shift
-
 set -x
 #docker pull $IMAGE
 IMAGE=jlm1
@@ -20,5 +17,5 @@ if $build; then
     docker build -t $IMAGE .
 fi
 
-exec docker run -ti --rm -v /localdisk:/localdisk -w $HERE $IMAGE  ansible-playbook -i inventory/${inv}/hosts.yml -b "$@"
+exec docker run -ti --rm -v /localdisk:/localdisk -w $HERE $IMAGE  ./runit.sh "$@"
 
