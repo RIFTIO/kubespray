@@ -6,6 +6,19 @@ if [ "$1" == "--build" ]; then
     build=true
 fi
 
+if [ $# -lt 2 ]; then
+    cat <<EOF
+args are inv ansible_args...."
+where inv is a dir under inventory 
+EOF
+    exit 1
+fi
+
+if ! [ -d inventory/$1 ]; then
+    echo inventory/$1 not found
+    exit 1
+fi
+
 #IMAGE="artifactory.riftio.com/docker/k8sclient"
 HERE=$(dirname $(realpath $0))
 
@@ -17,5 +30,6 @@ if $build; then
     docker build -t $IMAGE .
 fi
 
-exec docker run -ti --rm -v /localdisk:/localdisk -w $HERE $IMAGE  ./runit.sh "$@"
+docker run -ti --rm -v /localdisk:/localdisk -w $HERE $IMAGE  ./runit.sh "$@"
+docker run -ti --rm -v /localdisk:/localdisk -w $HERE $IMAGE  chown -R $(id -u):$(id -g) inventory/$1
 
