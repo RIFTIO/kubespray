@@ -1,12 +1,21 @@
 #!/bin/bash
 
+if [ $# -lt 2 ]; then
+    echo args are inventory ansible-args...
+    exit 1
+fi
+
 HERE=$(dirname $(realpath $0))
 
 inv=${1}
+if ! [ -f inventory/$inv/hosts.yml ]; then
+    echo "$inv not found"
+    exit 1
+fi
 shift
 
 IMAGE=kubespray-$LOGNAME
-docker build -t $IMAGE . || exit 1
+docker build -t $IMAGE docker  || exit 1
 
 set -x
 exec docker run -ti --rm -v /localdisk:/localdisk -w $HERE $IMAGE  ansible-playbook -i inventory/${inv}/hosts.yml -b "$@"
