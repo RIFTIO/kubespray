@@ -132,11 +132,13 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
+  labels:
+    k8s-app: kubernetes-dashboard
   name: kubernetes-dashboard
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: kubernetes-dashboard
+  name: cluster-admin
 subjects:
   - kind: ServiceAccount
     name: kubernetes-dashboard
@@ -235,8 +237,10 @@ spec:
   ports:
     - port: 443
       targetPort: 8443
+      nodePort: 31234
   selector:
     k8s-app: kubernetes-dashboard
+  type: NodePort
 
 ---
 # ------------------- Metrics Scrapper Service Account ------------------- #
